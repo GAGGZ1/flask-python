@@ -1,0 +1,50 @@
+<!-- chatbot.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Chatbot</h1>
+    <form id="chatbot-form">
+      <label for="query">Ask a question:</label>
+      <input
+        type="text"
+        name="query"
+        id="query"
+        placeholder="Enter your question"
+      />
+      <button type="submit">Submit</button>
+    </form>
+    <div id="response-container">
+      <!-- Responses will be displayed here -->
+    </div>
+    <script>
+      // JavaScript code to handle form submission and display responses
+      const form = document.getElementById("chatbot-form");
+      const responseContainer = document.getElementById("response-container");
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        const query = document.getElementById("query").value;
+
+        fetch(`/chatbot?query=${query}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const responseText = data.response;
+            const responseElement = document.createElement("p");
+            responseElement.textContent = `User: ${query}`;
+            responseContainer.appendChild(responseElement);
+            responseContainer.innerHTML += `<p>Chatbot: ${responseText}</p>`;
+          })
+          .catch((error) => console.error("Error:", error));
+      });
+    </script>
+  </body>
+</html>
